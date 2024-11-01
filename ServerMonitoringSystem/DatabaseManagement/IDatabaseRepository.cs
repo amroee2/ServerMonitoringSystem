@@ -1,6 +1,6 @@
 ﻿using ServerMonitoringSystem.ServerStatisticsManagement;
 
-namespace ServerMonitoringSystem
+namespace ServerMonitoringSystem.DatabaseManagement
 {
     public interface IDatabaseRepository
     {

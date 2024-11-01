@@ -1,7 +1,7 @@
 ﻿using MongoDB.Driver;
 using ServerMonitoringSystem.ServerStatisticsManagement;
 
-namespace ServerMonitoringSystem
+namespace ServerMonitoringSystem.DatabaseManagement
 {
     public class MongoDBRepository : IDatabaseRepository
     {
