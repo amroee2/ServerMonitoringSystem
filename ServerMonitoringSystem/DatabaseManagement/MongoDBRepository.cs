@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using ServerMonitoringSystem.ServerStatisticsManagement;
 
 namespace ServerMonitoringSystem.DatabaseManagement
@@ -18,6 +19,15 @@ namespace ServerMonitoringSystem.DatabaseManagement
         {
             var collection = _database.GetCollection<ServerStatistics>("Messages");
             await collection.InsertOneAsync(document);
+        }
+
+        public async Task<ServerStatistics> GetLatestDocumentAsync()
+        {
+            var collection = _database.GetCollection<ServerStatistics>("Messages");
+            return await collection.Find(new BsonDocument())
+                                   .Sort(Builders<ServerStatistics>.Sort.Descending("Timestamp"))
+                                   .Limit(1)
+                                   .FirstOrDefaultAsync();
         }
     }
 }
