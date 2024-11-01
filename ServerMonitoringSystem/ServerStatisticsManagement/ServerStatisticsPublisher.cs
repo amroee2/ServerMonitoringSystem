@@ -16,9 +16,9 @@ namespace ServerMonitoringSystem.ServerStatisticsManagement
             _messageQueueService.Publish(serverStatistics);
         }
 
-        public void GetMessage()
+        public ServerStatistics GetMessage()
         {
-            _messageQueueService.GetMessage();
+            return _messageQueueService.GetMessage();
         }
     }
 }
