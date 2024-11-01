@@ -1,5 +1,4 @@
-﻿using MongoDB.Driver;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using ServerMonitoringSystem.DatabaseManagement;
@@ -55,21 +54,21 @@ namespace ServerMonitoringSystem.MessageQueueServices
             }
         }
 
-        public void GetMessage()
+        public ServerStatistics GetMessage()
         {
             var consumer = new EventingBasicConsumer(_channel);
+            ServerStatistics serverStatistics = null;
             consumer.Received += (model, ea) =>
             {
                 var body = ea.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
-                var serverStatistics = JsonConvert.DeserializeObject<ServerStatistics>(message);
-                _databaseRepository.InsertDocumentAsync(serverStatistics);
-                Console.WriteLine($"Message received: {message}");
+                serverStatistics = JsonConvert.DeserializeObject<ServerStatistics>(message);
             };
 
             _channel.BasicConsume(queue: _queueName,
                                  autoAck: true,
                                  consumer: consumer);
+            return serverStatistics;
         }
         public void Dispose()
         {
