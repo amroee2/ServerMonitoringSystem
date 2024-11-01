@@ -13,12 +13,13 @@ namespace ServerMonitoringSystem
         {
             ServerStatistics = new ServerStatistics();
         }
-        public void UpdateStatistics()
+        public ServerStatistics UpdateStatistics()
         {
             ServerStatistics.MemoryUsage = GetMemoryUsage();
             ServerStatistics.AvailableMemory = GetAvailableMemory();
             ServerStatistics.CpuUsage = GetCpuUsage();
             ServerStatistics.Timestamp = DateTime.Now;
+            return ServerStatistics;
         }
 
         public double GetMemoryUsage()
