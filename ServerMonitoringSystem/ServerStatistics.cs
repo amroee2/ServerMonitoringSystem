@@ -6,5 +6,10 @@
         public double AvailableMemory { get; set; }
         public double CpuUsage { get; set; }
         public DateTime Timestamp { get; set; }
+
+        public override string ToString()
+        {
+            return $"Memory Usage: {MemoryUsage}MB, Available Memory: {AvailableMemory}MB, CPU Usage: {CpuUsage}%, Timestamp: {Timestamp}";
+        }
     }
 }
