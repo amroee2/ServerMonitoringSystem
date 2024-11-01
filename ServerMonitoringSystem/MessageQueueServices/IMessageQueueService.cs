@@ -1,6 +1,6 @@
 ﻿namespace ServerMonitoringSystem.MessageQueueServices
 {
-    public interface IMessageQueue
+    public interface IMessageQueueService
     {
         void Publish(string topic, string message);
     }

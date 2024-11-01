@@ -4,16 +4,16 @@ namespace ServerMonitoringSystem.ServerStatisticsManagement
 {
     public class ServerStatisticsPublisher
     {
-        private IMessageQueue MessageQueue { get; set; }
+        private IMessageQueueService _messageQueueService { get; set; }
 
-        public ServerStatisticsPublisher(IMessageQueue messageQueue)
+        public ServerStatisticsPublisher(IMessageQueueService messageQueue)
         {
-            MessageQueue = messageQueue;
+            _messageQueueService = messageQueue;
         }
 
         public void PublishServerStatistics(string topic, ServerStatistics serverStatistics)
         {
-            MessageQueue.Publish(topic, serverStatistics.ToString());
+            _messageQueueService.Publish(topic, serverStatistics.ToString());
         }
     }
 }

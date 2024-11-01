@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ServerMonitoringSystem.MessageQueueServices
 {
-    public class RabbitMQService : IMessageQueue
+    public class RabbitMQService : IMessageQueueService
     {
         private readonly IConnection _connection;
         private readonly IModel _channel;
