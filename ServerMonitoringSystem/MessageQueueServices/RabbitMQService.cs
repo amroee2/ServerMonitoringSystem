@@ -1,5 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using MongoDB.Driver;
+using Newtonsoft.Json;
 using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
+using ServerMonitoringSystem.ServerStatisticsManagement;
 using System.Text;
 
 namespace ServerMonitoringSystem.MessageQueueServices
@@ -10,8 +13,9 @@ namespace ServerMonitoringSystem.MessageQueueServices
         private readonly IModel _channel;
         private readonly string _queueName = "MessageQueues";
         private readonly string _exchangeName = "topic_logs";
+        private readonly IDatabaseRepository _databaseRepository;
 
-        public RabbitMQService()
+        public RabbitMQService(IDatabaseRepository databaseRepository)
         {
             var factory = new ConnectionFactory() { HostName = "localhost", Port = 5672 };
             _connection = factory.CreateConnection();
@@ -29,26 +33,47 @@ namespace ServerMonitoringSystem.MessageQueueServices
             _channel.QueueBind(queue: _queueName,
                                exchange: _exchangeName,
                                routingKey: "#");
+            _databaseRepository = databaseRepository;
         }
 
-        public void Publish(string topic, string message)
+        public void Publish(ServerStatistics serverStatistics)
         {
             try
             {
-                string jsonMessage = JsonConvert.SerializeObject(message);
+                string jsonMessage = JsonConvert.SerializeObject(serverStatistics);
                 var body = Encoding.UTF8.GetBytes(jsonMessage);
 
                 _channel.BasicPublish(exchange: _exchangeName,
-                                      routingKey: topic,
+                                      routingKey: serverStatistics.ServerIdentifier,
                                       basicProperties: null,
                                       body: body);
-
-                Console.WriteLine($"Message published to topic '{topic}': {message}");
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Failed to publish message: {ex.Message}");
             }
+        }
+
+        public void GetMessage()
+        {
+            var consumer = new EventingBasicConsumer(_channel);
+            consumer.Received += (model, ea) =>
+            {
+                var body = ea.Body.ToArray();
+                var message = Encoding.UTF8.GetString(body);
+                var serverStatistics = JsonConvert.DeserializeObject<ServerStatistics>(message);
+                _databaseRepository.InsertDocumentAsync(serverStatistics);
+                Console.WriteLine($"Message received: {message}");
+            };
+
+            _channel.BasicConsume(queue: _queueName,
+                                 autoAck: true,
+                                 consumer: consumer);
+        }
+        public void Dispose()
+        {
+            _channel.Close();
+            _connection.Close();
         }
     }
 }

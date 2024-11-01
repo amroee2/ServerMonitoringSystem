@@ -1,7 +1,11 @@
-﻿namespace ServerMonitoringSystem.MessageQueueServices
+﻿using MongoDB.Driver.Core.Servers;
+using ServerMonitoringSystem.ServerStatisticsManagement;
+
+namespace ServerMonitoringSystem.MessageQueueServices
 {
     public interface IMessageQueueService
     {
-        void Publish(string topic, string message);
+        void Publish(ServerStatistics serverStatistics);
+        void GetMessage();
     }
 }

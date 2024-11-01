@@ -6,13 +6,14 @@ using System.Text.Json;
 
 ServerStatisticsRepository serverStatisticsRepository = new();
 ServerStatisticsConfig config = ReadConfig("appsettings.json");
-ServerStatisticsPublisher serverStatisticsPublisher = new(new RabbitMQService());
+ServerStatisticsPublisher serverStatisticsPublisher = new(new RabbitMQService(new MongoDBRepository()));
 ServerStatistics statistics = new();
 while (true)
 {
     statistics = serverStatisticsRepository.UpdateStatistics();
-    serverStatisticsRepository.ShowServerStatistics();
-    serverStatisticsPublisher.PublishServerStatistics(config.ServerIdentifier, statistics);
+    statistics.ServerIdentifier = config.ServerIdentifier;
+    serverStatisticsPublisher.PublishServerStatistics(statistics);
+    serverStatisticsPublisher.GetMessage();
     Thread.Sleep(config.SamplingIntervalSeconds * 1000);
 }
 
