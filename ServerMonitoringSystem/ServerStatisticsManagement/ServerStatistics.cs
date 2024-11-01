@@ -2,6 +2,7 @@
 {
     public class ServerStatistics
     {
+        public string ServerIdentifier { get; set; }
         public double MemoryUsage { get; set; }
         public double AvailableMemory { get; set; }
         public double CpuUsage { get; set; }
@@ -9,7 +10,7 @@
 
         public override string ToString()
         {
-            return $"Memory Usage: {MemoryUsage}MB, Available Memory: {AvailableMemory}MB, CPU Usage: {CpuUsage}%, Timestamp: {Timestamp}";
+            return $"ServerIdentifier: {ServerIdentifier}, Memory Usage: {MemoryUsage}MB, Available Memory: {AvailableMemory}MB, CPU Usage: {CpuUsage}%, Timestamp: {Timestamp}";
         }
     }
 }
