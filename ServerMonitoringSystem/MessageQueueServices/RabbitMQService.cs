@@ -2,7 +2,7 @@
 using RabbitMQ.Client;
 using System.Text;
 
-namespace ServerMonitoringSystem
+namespace ServerMonitoringSystem.MessageQueueServices
 {
     public class RabbitMQService : IMessageQueue
     {
