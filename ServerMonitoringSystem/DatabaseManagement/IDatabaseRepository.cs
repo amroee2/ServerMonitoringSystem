@@ -4,7 +4,7 @@ namespace ServerMonitoringSystem.DatabaseManagement
 {
     public interface IDatabaseRepository
     {
-        Task InsertDocumentAsync(ServerStatistics document);
-        Task GetLatestDocumentAsync();
+        public Task InsertDocumentAsync(ServerStatistics document);
+        public Task<ServerStatistics> GetLatestDocumentAsync();
     }
 }

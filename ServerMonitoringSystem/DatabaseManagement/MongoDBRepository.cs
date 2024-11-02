@@ -25,6 +25,7 @@ namespace ServerMonitoringSystem.DatabaseManagement
         {
             var collection = _database.GetCollection<ServerStatistics>("Messages");
             return await collection.Find(new BsonDocument())
+                                   .Project<ServerStatistics>(Builders<ServerStatistics>.Projection.Exclude("_id"))
                                    .Sort(Builders<ServerStatistics>.Sort.Descending("Timestamp"))
                                    .Limit(1)
                                    .FirstOrDefaultAsync();
