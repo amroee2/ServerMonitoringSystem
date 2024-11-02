@@ -30,5 +30,11 @@ namespace ServerMonitoringSystem.DatabaseManagement
                                    .Limit(1)
                                    .FirstOrDefaultAsync();
         }
+
+        public async Task<bool> IsEmpty()
+        {
+            var collection = _database.GetCollection<ServerStatistics>("Messages");
+            return await collection.CountDocumentsAsync(new BsonDocument()) == 0;
+        }
     }
 }

@@ -6,5 +6,6 @@ namespace ServerMonitoringSystem.DatabaseManagement
     {
         public Task InsertDocumentAsync(ServerStatistics document);
         public Task<ServerStatistics> GetLatestDocumentAsync();
+        public Task<bool> IsEmpty();
     }
 }

@@ -30,7 +30,6 @@ async Task StartServerMonitoringAsync()
 async Task RunStatisticsMonitoringLoopAsync(ServerStatisticsConfig config, ServerStatisticsRepository serverStatisticsRepository, ServerStatisticsPublisher serverStatisticsPublisher,
     DatabaseRepository databaseRepository, AnamolyDetectionRepository anamolyDetectionRepository)
 {
-    int iterations = 0;
 
     while (true)
     {
@@ -39,14 +38,12 @@ async Task RunStatisticsMonitoringLoopAsync(ServerStatisticsConfig config, Serve
 
         serverStatisticsPublisher.PublishServerStatistics(statistics);
 
-        if (iterations == 0)
+        if (await databaseRepository.IsEmpty())
         {
             await InitialStatisticsSetupAsync(statistics, config, databaseRepository);
-            iterations++;
             continue;
         }
 
-        iterations++;
         await PerformStatisticsAndAnomalyDetectionAsync(statistics, serverStatisticsPublisher, databaseRepository, anamolyDetectionRepository);
         Thread.Sleep(config.SamplingIntervalSeconds * 1000);
     }

@@ -20,5 +20,10 @@ namespace ServerMonitoringSystem.DatabaseManagement
         {
             return await _databaseRepository.GetLatestDocumentAsync();
         }
+
+        public async Task<bool> IsEmpty()
+        {
+            return await _databaseRepository.IsEmpty();
+        }
     }
 }
