@@ -2,18 +2,18 @@
 
 namespace ServerMonitoringSystem.ServerStatisticsManagement
 {
-    public class ServerStatisticsPublisher
+    public class ServerStatisticsConsumer
     {
+
         private IMessageQueueService _messageQueueService { get; set; }
 
-        public ServerStatisticsPublisher(IMessageQueueService messageQueue)
+        public ServerStatisticsConsumer(IMessageQueueService messageQueue)
         {
             _messageQueueService = messageQueue;
         }
-
-        public void PublishServerStatistics(ServerStatistics serverStatistics)
+        public ServerStatistics GetMessage()
         {
-            _messageQueueService.Publish(serverStatistics);
+            return _messageQueueService.GetMessage();
         }
     }
 }

@@ -22,14 +22,16 @@ async Task StartServerMonitoringAsync()
     var mongoDBRepository = new MongoDBRepository();
     DatabaseRepository databaseRepository = new DatabaseRepository(mongoDBRepository);
     var serverStatisticsRepository = new ServerStatisticsRepository();
-    var serverStatisticsPublisher = new ServerStatisticsPublisher(new RabbitMQService());
+    RabbitMQService rabbitMQService = new RabbitMQService();
+    var serverStatisticsPublisher = new ServerStatisticsPublisher(rabbitMQService);
+    var serverStatisticsConsumer = new ServerStatisticsConsumer(rabbitMQService);
     var anamolyDetectionRepository = new AnamolyDetectionRepository(anamolyThresholdConfig, client);
 
-    await RunStatisticsMonitoringLoopAsync(config, serverStatisticsRepository, serverStatisticsPublisher, databaseRepository, anamolyDetectionRepository);
+    await RunStatisticsMonitoringLoopAsync(config, serverStatisticsRepository, serverStatisticsPublisher, databaseRepository, anamolyDetectionRepository, serverStatisticsConsumer);
 }
 
 async Task RunStatisticsMonitoringLoopAsync(ServerStatisticsConfig config, ServerStatisticsRepository serverStatisticsRepository, ServerStatisticsPublisher serverStatisticsPublisher,
-    DatabaseRepository databaseRepository, AnamolyDetectionRepository anamolyDetectionRepository)
+    DatabaseRepository databaseRepository, AnamolyDetectionRepository anamolyDetectionRepository, ServerStatisticsConsumer serverStatisticsConsumer)
 {
 
     while (true)
@@ -45,7 +47,7 @@ async Task RunStatisticsMonitoringLoopAsync(ServerStatisticsConfig config, Serve
             continue;
         }
 
-        await PerformStatisticsAndAnomalyDetectionAsync(statistics, serverStatisticsPublisher, databaseRepository, anamolyDetectionRepository);
+        await PerformStatisticsAndAnomalyDetectionAsync(statistics, serverStatisticsPublisher, databaseRepository, anamolyDetectionRepository, serverStatisticsConsumer);
         Thread.Sleep(config.SamplingIntervalSeconds * 1000);
     }
 }
@@ -57,10 +59,10 @@ async Task InitialStatisticsSetupAsync(ServerStatistics statistics, ServerStatis
 }
 
 async Task PerformStatisticsAndAnomalyDetectionAsync(ServerStatistics statistics, ServerStatisticsPublisher serverStatisticsPublisher,
-    DatabaseRepository databaseRepository, AnamolyDetectionRepository anamolyDetectionRepository)
+    DatabaseRepository databaseRepository, AnamolyDetectionRepository anamolyDetectionRepository, ServerStatisticsConsumer serverStatisticsConsumer)
 {
     var previousStatistics = await databaseRepository.GetLatestDocumentAsync();
-    var latestStatistics = serverStatisticsPublisher.GetMessage();
+    var latestStatistics = serverStatisticsConsumer.GetMessage();
 
     anamolyDetectionRepository.DetectAnamoly(statistics, previousStatistics);
     anamolyDetectionRepository.DetectHighUsage(statistics, previousStatistics);
