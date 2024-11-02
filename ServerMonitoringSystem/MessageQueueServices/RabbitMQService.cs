@@ -13,9 +13,8 @@ namespace ServerMonitoringSystem.MessageQueueServices
         private readonly IModel _channel;
         private readonly string _queueName = "MessageQueues";
         private readonly string _exchangeName = "topic_logs";
-        private readonly IDatabaseRepository _databaseRepository;
 
-        public RabbitMQService(IDatabaseRepository databaseRepository)
+        public RabbitMQService()
         {
             var factory = new ConnectionFactory() { HostName = "localhost", Port = 5672 };
             _connection = factory.CreateConnection();
@@ -33,7 +32,6 @@ namespace ServerMonitoringSystem.MessageQueueServices
             _channel.QueueBind(queue: _queueName,
                                exchange: _exchangeName,
                                routingKey: "#");
-            _databaseRepository = databaseRepository;
         }
 
         public void Publish(ServerStatistics serverStatistics)
