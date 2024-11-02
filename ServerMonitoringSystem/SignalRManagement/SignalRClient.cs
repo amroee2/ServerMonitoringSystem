@@ -6,7 +6,7 @@ namespace ServerMonitoringSystem.SignalRManagement
     {
         private readonly HubConnection _connection;
 
-        public SignalRClient(string hubUrl = "http://localhost:5000/chatHub")
+        public SignalRClient(string hubUrl)
         {
             _connection = new HubConnectionBuilder()
                 .WithUrl(hubUrl)

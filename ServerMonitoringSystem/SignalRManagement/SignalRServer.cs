@@ -9,7 +9,7 @@ namespace ServerMonitoringSystem.SignalRManagement
     {
         private readonly IHost _host;
 
-        public SignalRServer(string url = "http://localhost:5000")
+        public SignalRServer(string url)
         {
             _host = Host.CreateDefaultBuilder()
                 .ConfigureServices((context, services) =>
@@ -20,7 +20,7 @@ namespace ServerMonitoringSystem.SignalRManagement
                         options.AddPolicy("AllowSpecificOrigins",
                             builder =>
                             {
-                                builder.WithOrigins("http://localhost:5000")
+                                builder.WithOrigins(url)
                                        .AllowAnyHeader()
                                        .AllowAnyMethod()
                                        .AllowCredentials();

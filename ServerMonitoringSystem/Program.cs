@@ -9,10 +9,11 @@ await StartServerMonitoringAsync();
 
 async Task StartServerMonitoringAsync()
 {
-    var server = new SignalRServer();
+    string url = GetHubUrl("appsettings.json");
+    var server = new SignalRServer(url);
     await server.StartAsync();
 
-    var client = new SignalRClient();
+    var client = new SignalRClient($"{url}/chatHub");
     await client.ConnectAsync();
 
     var config = LoadServerStatisticsConfig("appsettings.json");
@@ -89,4 +90,10 @@ AnamolyThresholdConfig LoadAnamolyThresholdConfig(string filePath)
         MemoryUsageThresholdPercentage = (double)config["AnomalyDetectionConfig"]["MemoryUsageThresholdPercentage"],
         CpuUsageThresholdPercentage = (double)config["AnomalyDetectionConfig"]["CpuUsageThresholdPercentage"]
     };
+}
+
+string GetHubUrl(string filePath)
+{
+    JObject config = JObject.Parse(File.ReadAllText(filePath));
+    return (string)config["SignalRConfig"]["SignalRUrl"];
 }
