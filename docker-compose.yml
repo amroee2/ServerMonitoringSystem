@@ -1,0 +1,85 @@
+version: '3.8'
+
+services:
+  # RabbitMQ service
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "15672:15672"  # Management UI
+      - "5672:5672"     # RabbitMQ default port
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=pass
+    networks:
+      - monitoring-network
+
+  # MongoDB service
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"   # MongoDB default port
+    networks:
+      - monitoring-network
+
+  # Database Management Service
+  database-management:
+    build:
+      context: .
+      dockerfile: ServerMonitoringSystemDatabaseManagement/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - CONNECTION_STRING=mongodb://mongodb:27017  # MongoDB connection string to point to MongoDB container
+    ports:
+      - "5001:80"
+    networks:
+      - monitoring-network
+    depends_on:
+      - mongodb
+
+  # Message Queue Services
+  message-queue-services:
+    build:
+      context: .
+      dockerfile: ServerMonitoringSystemMessageQueueServices/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - MESSAGE_QUEUE_HOST=rabbitmq  # RabbitMQ host set to container name
+      - MESSAGE_QUEUE_PORT=5672       # Default RabbitMQ port
+    ports:
+      - "5002:80"
+    networks:
+      - monitoring-network
+    depends_on:
+      - rabbitmq
+
+  # Server Statistics Management Service
+  server-statistics-management:
+    build:
+      context: .
+      dockerfile: ServerMonitoringSystemServerStatisticsManagement/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - STATISTICS_DB_CONNECTION=mongodb://mongodb:27017  # MongoDB connection string
+    ports:
+      - "5003:80"
+    networks:
+      - monitoring-network
+    depends_on:
+      - mongodb
+
+  # SignalR Management Service
+  signalr-management:
+    build:
+      context: .
+      dockerfile: ServerMonitoringSystemSignalRManagement/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - SIGNALR_URL=http://localhost:5000/chatHub  # External URL to connect clients to SignalR
+    ports:
+      - "5004:80"
+    networks:
+      - monitoring-network
+
+networks:
+  monitoring-network:
+    driver: bridge
