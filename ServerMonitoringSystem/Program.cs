@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json.Linq;
-using ServerMonitoringSystem;
-using ServerMonitoringSystem.DatabaseManagement;
-using ServerMonitoringSystem.MessageQueueServices;
-using ServerMonitoringSystem.ServerStatisticsManagement;
-using ServerMonitoringSystem.SignalRManagement;
+using ServerMonitoringSystemDatabaseManagement.DatabaseManagement;
+using ServerMonitoringSystemMessageQueueServices.MessageQueueServices;
+using ServerMonitoringSystemServerStatisticsManagement.ServerStatisticsManagement;
+using ServerMonitoringSystemSignalRManagement.SignalRManagement;
+
 
 await StartServerMonitoringAsync();
 

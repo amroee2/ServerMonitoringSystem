@@ -1,4 +1,4 @@
-﻿namespace ServerMonitoringSystem.SignalRManagement
+﻿namespace ServerMonitoringSystemSignalRManagement.SignalRManagement
 {
     public interface ISignalRService
     {

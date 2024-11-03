@@ -25,6 +25,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ServerMonitoringSystemDatabaseManagement\ServerMonitoringSystemDatabaseManagement.csproj" />
+    <ProjectReference Include="..\ServerMonitoringSystemMessageQueueServices\ServerMonitoringSystemMessageQueueServices.csproj" />
+    <ProjectReference Include="..\ServerMonitoringSystemSignalRManagement\ServerMonitoringSystemSignalRManagement.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

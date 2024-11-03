@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 
-namespace ServerMonitoringSystem.SignalRManagement
+namespace ServerMonitoringSystemSignalRManagement.SignalRManagement
 {
     public class SignalRClient : ISignalRService
     {
