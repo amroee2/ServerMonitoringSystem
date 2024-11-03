@@ -1,8 +1,8 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
-using ServerMonitoringSystem.ServerStatisticsManagement;
+using ServerMonitoringSystemServerStatisticsManagement.ServerStatisticsManagement;
 
-namespace ServerMonitoringSystem.DatabaseManagement
+namespace ServerMonitoringSystemDatabaseManagement.DatabaseManagement
 {
     public class MongoDBRepository : IDatabaseRepository
     {
