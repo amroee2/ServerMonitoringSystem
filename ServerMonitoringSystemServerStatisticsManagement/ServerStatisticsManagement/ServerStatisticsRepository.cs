@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace ServerMonitoringSystem.ServerStatisticsManagement
+namespace ServerMonitoringSystemServerStatisticsManagement.ServerStatisticsManagement
 {
     public class ServerStatisticsRepository
     {

@@ -1,6 +1,4 @@
-﻿using ServerMonitoringSystem.MessageQueueServices;
-
-namespace ServerMonitoringSystem.ServerStatisticsManagement
+﻿namespace ServerMonitoringSystemServerStatisticsManagement.ServerStatisticsManagement
 {
     public class ServerStatisticsPublisher
     {

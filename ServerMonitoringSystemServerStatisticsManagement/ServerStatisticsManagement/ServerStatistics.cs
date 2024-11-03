@@ -1,4 +1,4 @@
-﻿namespace ServerMonitoringSystem.ServerStatisticsManagement
+﻿namespace ServerMonitoringSystemServerStatisticsManagement.ServerStatisticsManagement
 {
     public class ServerStatistics
     {
