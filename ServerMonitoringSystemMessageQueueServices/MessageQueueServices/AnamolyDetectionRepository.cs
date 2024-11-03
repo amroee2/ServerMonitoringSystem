@@ -1,8 +1,7 @@
-﻿using ServerMonitoringSystem.DatabaseManagement;
-using ServerMonitoringSystem.ServerStatisticsManagement;
-using ServerMonitoringSystem.SignalRManagement;
+﻿using ServerMonitoringSystemServerStatisticsManagement.ServerStatisticsManagement;
+using ServerMonitoringSystemSignalRManagement.SignalRManagement;
 
-namespace ServerMonitoringSystem
+namespace ServerMonitoringSystemMessageQueueServices.MessageQueueServices
 {
     public class AnamolyDetectionRepository
     {
@@ -16,11 +15,11 @@ namespace ServerMonitoringSystem
         }
         public void DetectAnamoly(ServerStatistics currentServerStatistics, ServerStatistics previousServerStatistics)
         {
-            if (currentServerStatistics.CpuUsage > (previousServerStatistics.CpuUsage * (1 + _anamolyThresholdConfig.CpuUsageAnomalyThresholdPercentage)))
+            if (currentServerStatistics.CpuUsage > previousServerStatistics.CpuUsage * (1 + _anamolyThresholdConfig.CpuUsageAnomalyThresholdPercentage))
             {
                 _signalRService.SendMessageAsync("amro", $"Anamoly Alert: Cpu Usage Anamoly detected with Identifier {currentServerStatistics.ServerIdentifier}");
             }
-            if (currentServerStatistics.MemoryUsage > (previousServerStatistics.MemoryUsage *(1+_anamolyThresholdConfig.MemoryUsageAnomalyThresholdPercentage)))
+            if (currentServerStatistics.MemoryUsage > previousServerStatistics.MemoryUsage * (1 + _anamolyThresholdConfig.MemoryUsageAnomalyThresholdPercentage))
             {
                 _signalRService.SendMessageAsync("amro", $"Anamoly Alert: Memory Usage Anamoly detected with Identifier {currentServerStatistics.ServerIdentifier}");
             }
@@ -28,7 +27,7 @@ namespace ServerMonitoringSystem
 
         public void DetectHighUsage(ServerStatistics currentServerStatistics, ServerStatistics previousServerStatistics)
         {
-            if ((currentServerStatistics.MemoryUsage/(currentServerStatistics.MemoryUsage + currentServerStatistics.AvailableMemory)) > _anamolyThresholdConfig.MemoryUsageThresholdPercentage)
+            if (currentServerStatistics.MemoryUsage / (currentServerStatistics.MemoryUsage + currentServerStatistics.AvailableMemory) > _anamolyThresholdConfig.MemoryUsageThresholdPercentage)
             {
                 _signalRService.SendMessageAsync("amro", $"High Usage Alert: Memory Usage High Usage detected with Identifier {currentServerStatistics.ServerIdentifier}");
             }

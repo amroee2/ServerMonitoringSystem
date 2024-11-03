@@ -1,4 +1,4 @@
-﻿namespace ServerMonitoringSystem
+﻿namespace ServerMonitoringSystemMessageQueueServices.MessageQueueServices
 {
     public class AnamolyThresholdConfig
     {

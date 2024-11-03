@@ -1,11 +1,10 @@
 ﻿using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using ServerMonitoringSystem.DatabaseManagement;
-using ServerMonitoringSystem.ServerStatisticsManagement;
+using ServerMonitoringSystemServerStatisticsManagement.ServerStatisticsManagement;
 using System.Text;
 
-namespace ServerMonitoringSystem.MessageQueueServices
+namespace ServerMonitoringSystemMessageQueueServices.MessageQueueServices
 {
     public class RabbitMQService : IMessageQueueService
     {
