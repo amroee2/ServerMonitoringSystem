@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Models\Models.csproj" />
     <ProjectReference Include="..\ServerMonitoringSystemServerStatisticsManagement\ServerMonitoringSystemServerStatisticsManagement.csproj" />
     <ProjectReference Include="..\ServerMonitoringSystemSignalRManagement\ServerMonitoringSystemSignalRManagement.csproj" />
   </ItemGroup>
