@@ -1,17 +1,22 @@
 ﻿using System.Diagnostics;
 
-namespace ServerMonitoringSystemServerStatisticsManagement.ServerStatisticsManagement
+namespace Models.StatisticsCollectors
 {
-    public class ServerStatisticsRepository
+    public class WindowsServerStatisticsRepository
     {
-        private ServerStatistics ServerStatistics { get; set; }
-        private static PerformanceCounter CpuCounter = new("Processor", "% Processor Time", "_Total");
-        private static PerformanceCounter RamCounter = new("Memory", "Available MBytes");
-        private static PerformanceCounter TotalMemoryCounter = new("Memory", "Committed Bytes");
+        public ServerStatistics ServerStatistics { get; set; }
+        private static PerformanceCounter CpuCounter;
+        private static PerformanceCounter RamCounter;
+        private static PerformanceCounter TotalMemoryCounter;
 
-        public ServerStatisticsRepository()
+        public WindowsServerStatisticsRepository()
         {
+            CpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+            RamCounter = new PerformanceCounter("Memory", "Available MBytes");
+            TotalMemoryCounter = new PerformanceCounter("Memory", "Committed Bytes");
             ServerStatistics = new ServerStatistics();
+            UpdateStatistics();
+
         }
         public ServerStatistics UpdateStatistics()
         {
@@ -38,11 +43,6 @@ namespace ServerMonitoringSystemServerStatisticsManagement.ServerStatisticsManag
         public double GetCpuUsage()
         {
             return CpuCounter.NextValue();
-        }
-
-        public void ShowServerStatistics()
-        {
-            Console.WriteLine(ServerStatistics);
         }
     }
 }
