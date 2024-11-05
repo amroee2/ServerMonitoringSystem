@@ -1,4 +1,7 @@
-﻿namespace ServerMonitoringSystemServerStatisticsManagement.ServerStatisticsManagement
+﻿using Models.MessageQueues;
+using Models.StatisticsCollectors;
+
+namespace ServerMonitoringSystemServerStatisticsManagement.ServerStatisticsManagement
 {
     public class ServerStatisticsConsumer
     {
@@ -11,7 +14,7 @@
         }
         public ServerStatistics GetMessage()
         {
-            return _messageQueueService.GetMessage();
+            return  _messageQueueService.GetMessage();
         }
     }
 }
