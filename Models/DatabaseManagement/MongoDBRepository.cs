@@ -1,8 +1,8 @@
-﻿using Models;
+﻿using Models.StatisticsCollectors;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
-namespace ServerMonitoringSystemDatabaseManagement.DatabaseManagement
+namespace Models.DatabaseManagement
 {
     public class MongoDBRepository : IDatabaseRepository
     {
@@ -10,7 +10,7 @@ namespace ServerMonitoringSystemDatabaseManagement.DatabaseManagement
 
         public MongoDBRepository()
         {
-            string connectionString = "mongodb://mongodb:27017";
+            string connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
             var client = new MongoClient(connectionString);
             _database = client.GetDatabase("ServerMonitoringSystem");
         }

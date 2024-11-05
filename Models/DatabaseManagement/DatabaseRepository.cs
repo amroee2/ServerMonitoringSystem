@@ -1,7 +1,6 @@
-﻿
-using Models;
+﻿using Models.StatisticsCollectors;
 
-namespace ServerMonitoringSystemDatabaseManagement.DatabaseManagement
+namespace Models.DatabaseManagement
 {
     public class DatabaseRepository
     {
