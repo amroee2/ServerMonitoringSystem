@@ -47,9 +47,8 @@ namespace ServerMonitoringSystemSignalRManagement.SignalRManagement
 
         public async Task StartAsync()
         {
-            _ = _host.RunAsync();
+            await _host.RunAsync();
             Console.WriteLine("SignalR Server started.");
-
         }
 
         public async Task StopAsync()
