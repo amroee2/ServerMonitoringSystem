@@ -1,4 +1,4 @@
-﻿using ServerMonitoringSystemServerStatisticsManagement.ServerStatisticsManagement;
+﻿using Models.StatisticsCollectors;
 using ServerMonitoringSystemSignalRManagement.SignalRManagement;
 
 namespace ServerMonitoringSystemMessageQueueServices.MessageQueueServices
@@ -25,10 +25,11 @@ namespace ServerMonitoringSystemMessageQueueServices.MessageQueueServices
             }
         }
 
-        public void DetectHighUsage(ServerStatistics currentServerStatistics, ServerStatistics previousServerStatistics)
+        public void DetectHighUsage(ServerStatistics currentServerStatistics)
         {
             if (currentServerStatistics.MemoryUsage / (currentServerStatistics.MemoryUsage + currentServerStatistics.AvailableMemory) > _anamolyThresholdConfig.MemoryUsageThresholdPercentage)
             {
+ 
                 _signalRService.SendMessageAsync("amro", $"High Usage Alert: Memory Usage High Usage detected with Identifier {currentServerStatistics.ServerIdentifier}");
             }
             if (currentServerStatistics.CpuUsage > _anamolyThresholdConfig.CpuUsageThresholdPercentage)
