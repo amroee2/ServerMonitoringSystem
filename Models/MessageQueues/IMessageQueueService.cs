@@ -1,4 +1,6 @@
-﻿namespace ServerMonitoringSystemServerStatisticsManagement.ServerStatisticsManagement
+﻿using Models.StatisticsCollectors;
+
+namespace Models.MessageQueues
 {
     public interface IMessageQueueService
     {
