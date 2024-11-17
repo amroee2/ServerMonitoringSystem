@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    expose:
+      - 15672
+      - 5672
+    networks:
+      - monitoring-network
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    networks:
+      - monitoring-network
+
+  server-statistics-management:
+    build:
+      context: .
+      dockerfile: ServerMonitoringSystemServerStatisticsManagement/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      MESSAGE_QUEUE_HOST: rabbitmq
+      RABBITMQ_USERNAME: guest
+      RABBITMQ_PASSWORD: guest
+    
+    ports:
+      - "5003:80"
+    networks:
+      - monitoring-network
+    depends_on:
+      - mongodb
+      - rabbitmq
+
+  signalr-management:
+    build:
+      context: .
+      dockerfile: ServerMonitoringSystemSignalRManagement/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      SIGNALR_URL: http://signalr-management:80
+    ports:
+      - "5004:80"
+    networks:
+      - monitoring-network
+
+  message-queue-services:
+    build:
+      context: .
+      dockerfile: ServerMonitoringSystemMessageQueueServices/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      MESSAGE_QUEUE_HOST: rabbitmq
+      RABBITMQ_USERNAME: guest
+      RABBITMQ_PASSWORD: guest
+
+    ports:
+      - "5002:80"
+    networks:
+      - monitoring-network
+    depends_on:
+      - rabbitmq
+      - server-statistics-management
+      - signalr-management
+      - mongodb
+
+networks:
+  monitoring-network:
+    driver: bridge
